@@ -1,29 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Model } from '@/types';
 
 interface Props {
-  onChipClick: (text: string) => void;
+  selected: Model;
+  onSelect: (model: Model) => void;
 }
 
-const chips = [
-  'Design an iOS app',
-  'Explain quantum computing',
-  'Write a poem',
-  'Plan a trip',
-  'Code a website',
-];
+export default function ModelSelector({ selected, onSelect }: Props) {
+  const [open, setOpen] = useState(false);
 
-export default function WelcomeSection({ onChipClick }: Props) {
+  const models: { value: Model; label: string }[] = [
+    { value: 'gemini', label: 'Gemini' },
+    { value: 'groq', label: 'Groq' },
+  ];
+
   return (
-    <div className="welcome-section">
-      <div className="gradient-title">EimemesChat AI</div>
-      <div className="recommendation-prompt">How can I help you today?</div>
-      <div className="suggestion-chips">
-        {chips.map((chip) => (
-          <span key={chip} className="chip" onClick={() => onChipClick(chip)}>
-            {chip}
-          </span>
-        ))}
+    <div style={{ position: 'relative' }}>
+      <div className="model-selector-button" onClick={() => setOpen(!open)}>
+        <span>{selected === 'gemini' ? 'Gemini' : 'Groq'}</span>
+        <span className="chevron">▼</span>
       </div>
+      {open && (
+        <div className="model-dropdown">
+          {models.map((model) => (
+            <div
+              key={model.value}
+              className={`model-dropdown-item ${selected === model.value ? 'selected' : ''}`}
+              onClick={() => {
+                onSelect(model.value);
+                setOpen(false);
+              }}
+            >
+              {model.label}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
