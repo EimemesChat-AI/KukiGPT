@@ -1,5 +1,4 @@
-
-import ChatContainer from '@/components/ChatContainer';
+import ChatContainer from '../components/ChatContainer';  // Relative path
 
 export default function Home() {
   return (
